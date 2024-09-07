@@ -40,21 +40,21 @@ static const int JSONRPC_CPP_VERSION = 500;
 static const char JSONRPC_CPP_VERSION_STRING[] = "0.5.0";
 
 /* include from external jsoncpp lib */
-#include <json/json.h>
+#include <common/json/json.h>
 
 /* include all headers from JsonRpc-Cpp lib */
 #include "jsonrpc_common.h"
 #include "jsonrpc_handler.h"
 #include "jsonrpc_server.h"
-#include "jsonrpc_udpserver.h"
+//#include "jsonrpc_udpserver.h"
 #include "jsonrpc_tcpserver.h"
 #include "jsonrpc_client.h"
-#include "jsonrpc_udpclient.h"
+//#include "jsonrpc_udpclient.h"
 #include "jsonrpc_tcpclient.h"
 
-#ifdef CURL_ENABLED_H
-#include "jsonrpc_httpclient.h"
-#endif
+//#ifdef CURL_ENABLED_H
+//#include "jsonrpc_httpclient.h"
+//#endif
 
 #include "netstring.h"
 #include "networking.h"

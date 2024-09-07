@@ -27,10 +27,14 @@
 
 #ifdef _WIN32
 
+#define snprintf _snprintf
+
 #ifndef _MSC_VER
 #include <stdint.h>
 #endif
+#include <stdint.h>
 
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <winsock2.h>
 
@@ -52,7 +56,6 @@
 #endif
 
 typedef int socklen_t;
-#define close closesocket
 
 #else
 

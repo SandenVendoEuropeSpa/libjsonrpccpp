@@ -25,6 +25,18 @@
 #ifndef JSONRPC_TCPSERVER_H
 #define JSONRPC_TCPSERVER_H
 
+//Coban modification to allow large buffer receiving
+#define RECV_NOBLOCKING
+//#undef  RECV_NOBLOCKING
+
+//Coban modification to allow the execution of queued message in the receiving tcp buffer
+#define RECV_QUEUED
+//#undef  RECV_QUEUED
+
+//Coban modification: experimental
+#define MULTITREAD
+#undef MULTITREAD
+
 #include <list>
 
 #include "jsonrpc_common.h"
@@ -60,15 +72,36 @@ namespace Json
          * response sent, false otherwise (mainly send/recv error)
          * \note This method will blocked until data comes.
          */
+
+#ifndef MULTITREAD
         virtual bool Recv(int fd);
+#else
+        void RecvRun(int fd);
+        void *Recv(void *arg);
+#endif
+
+        virtual int GetReceivingSocket(void);
 
         /**
          * \brief Send data.
          * \param fd file descriptor of the client TCP socket
          * \param data data to send
-         * \return number of bytes sent or -1 if error
+         * --------- \return number of bytes sent or -1 if error
+         * \return True if data is correctly sent over TCP socket, False otherwise.
          */
-        virtual ssize_t Send(int fd, const std::string& data);
+        // CM_071219: Add function to send data over tcp socket managing TCP packet fragmentation
+        //virtual ssize_t Send(int fd, const std::string& data);
+        virtual bool Send(int fd, const std::string& data);
+
+        /**
+         *
+		 * \brief Send data in json format.
+		 * \param ms timeout to wait write operation on socket available
+		 * \param jsonMsg data to send
+		 * \return True if data is correctly sent over TCP socket, False otherwise.
+		 */
+        //virtual bool SendMessage(uint32_t ms, const Json::Value& jsonMsg);
+        virtual bool SendMessage(int fd, const Json::Value& jsonMsg);
 
         /**
          * \brief Wait message.
@@ -108,6 +141,18 @@ namespace Json
          */
         TcpServer(const TcpServer& obj);
 
+#ifdef RECV_NOBLOCKING
+        /**
+         * \brief Receive data in multiple chunks by checking a non-blocking socket
+         * \brief int s, socket descriptor
+         * \brief int timeout, Timeout in seconds
+         */
+        int recv_timeout(int s , int timeout, std::string& data, char* buf);
+  #ifdef _WIN32
+        int  gettimeofday(struct timeval * tp, struct timezone * tzp);
+  #endif
+#endif
+
         /**
          * \brief Operator copy assignment (private because of "resource"
          * class).
@@ -125,6 +170,11 @@ namespace Json
          * \brief List of disconnected sockets to be purged.
          */
         std::list<int> m_purge;
+
+        /**
+		 * \brief Socket that is receiving data from a connected client (last receiving socket).
+		 */
+        int m_currentReceivingSocket;
     };
   } /* namespace Rpc */
 } /* namespace Json */

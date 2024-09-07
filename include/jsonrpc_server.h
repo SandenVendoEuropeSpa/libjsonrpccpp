@@ -105,7 +105,10 @@ namespace Json
          * response sent, false otherwise (mainly send/receive error)
          * \note This method will blocked until data comes.
          */
+        
+#ifndef MULTITREAD
         virtual bool Recv(int fd) = 0;
+#endif
         
         /**
          * \brief Close socket.
