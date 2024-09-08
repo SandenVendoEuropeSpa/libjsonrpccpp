@@ -24,9 +24,6 @@
 
 #include "jsonrpc_handler.h"
 
-#define DEBUG
-#undef DEBUG
-
 namespace Json
 {
   namespace Rpc
@@ -160,10 +157,6 @@ namespace Json
       }
 
       method = root["method"].asString();
-
-#ifdef DEBUG
-      std::cout << "Called Method is " << method << std::endl;
-#endif
       
       if(method != "")
       {

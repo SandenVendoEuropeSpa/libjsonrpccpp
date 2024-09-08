@@ -38,9 +38,6 @@
   #include<fcntl.h>     //fcntl
 #endif
 
-#define DEBUG
-#undef DEBUG
-
 //Size of each chunk of data received
 #define CHUNK_SIZE 1500
 

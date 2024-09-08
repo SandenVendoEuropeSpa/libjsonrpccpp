@@ -32,9 +32,6 @@
 #include <cstring>
 #include <cerrno>
 
-#define DEBUG
-//#undef DEBUG
-
 #ifdef RECV_NOBLOCKING
   #include<string.h>    //strlen
   #ifdef _WIN32
@@ -225,9 +222,6 @@ int TcpServer::GetReceivingSocket(void)
 
       nb = recv(fd, buf, sizeof(buf), 0);
 
-#ifdef DEBUG
-      //std::cout << "RECV = " << fd << std::endl;
-#endif
       /* give the message to JsonHandler */
       if(nb > 0)
       {
@@ -409,9 +403,6 @@ int TcpServer::GetReceivingSocket(void)
         if(FD_ISSET(m_sock, &fdsr))
         {
           Accept();
-#ifdef DEBUG
-          //std::cout << "ACCEPT = " << m_sock << " - " << max_sock << std::endl;
-#endif
         }
 
         for(std::list<int>::iterator it = m_clients.begin() ; it != m_clients.end() ; it++)
@@ -429,9 +420,6 @@ int TcpServer::GetReceivingSocket(void)
           if(s > 0)
           {
             close(s);
-#ifdef DEBUG
-            //std::cout << "CLOSE = " << s << std::endl;
-#endif
           }
           m_clients.remove(s);
         }
