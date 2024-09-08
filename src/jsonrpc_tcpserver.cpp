@@ -64,7 +64,7 @@ namespace Json
       }
     }
 
-#if 0 //CM_071219: Add function to send data over tcp socket managing TCP packet fragmentation
+#ifndef ALLOW_TCP_FRAGMENTATION
     ssize_t TcpServer::Send(int fd, const std::string& data)
     {
       std::string rep = data;
@@ -77,7 +77,7 @@ namespace Json
 
       return ::send(fd, rep.c_str(), rep.length(), 0);
     }
-#else
+#else //ALLOW_TCP_FRAGMENTATION
     bool TcpServer::Send(int fd, const std::string& data)
     {
     	bool tcpTxOk = false;
@@ -105,9 +105,9 @@ namespace Json
 		}
     	return tcpTxOk;
     }
-#endif
+#endif //ALLOW_TCP_FRAGMENTATION
 
-#if 0
+#ifndef ALLOW_TCP_FRAGMENTATION
 bool TcpServer::SendMessage(uint32_t ms, const Json::Value& jsonMsg)
 {
 	bool jsonMsgTx = false;
@@ -184,7 +184,7 @@ bool TcpServer::SendMessage(uint32_t ms, const Json::Value& jsonMsg)
 	  }
 	}
 }
-#else
+#else //ALLOW_TCP_FRAGMENTATION
 bool TcpServer::SendMessage(int fd, const Json::Value& jsonMsg)
 {
 	bool jsonMsgTx = false;
@@ -205,7 +205,8 @@ bool TcpServer::SendMessage(int fd, const Json::Value& jsonMsg)
 	}
 	return jsonMsgTx;
 }
-#endif
+#endif //ALLOW_TCP_FRAGMENTATION
+
 int TcpServer::GetReceivingSocket(void)
 {
 	return m_currentReceivingSocket;

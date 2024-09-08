@@ -27,11 +27,12 @@
 
 //Coban modification to allow large buffer receiving
 #define RECV_NOBLOCKING
-//#undef  RECV_NOBLOCKING
 
 //Coban modification to allow the execution of queued message in the receiving tcp buffer
 #define RECV_QUEUED
-//#undef  RECV_QUEUED
+
+//CM 
+#define ALLOW_TCP_FRAGMENTATION
 
 #include <list>
 
@@ -72,27 +73,32 @@ namespace Json
 
         virtual int GetReceivingSocket(void);
 
+#ifndef ALLOW_TCP_FRAGMENTATION
         /**
          * \brief Send data.
          * \param fd file descriptor of the client TCP socket
          * \param data data to send
-         * --------- \return number of bytes sent or -1 if error
+         * \return number of bytes sent or -1 if error
+         */
+        virtual ssize_t Send(int fd, const std::string& data);
+#else
+        /**
+         * \brief Send data.
+         * \param fd file descriptor of the client TCP socket
+         * \param data data to send
          * \return True if data is correctly sent over TCP socket, False otherwise.
          */
-        // CM_071219: Add function to send data over tcp socket managing TCP packet fragmentation
-        //virtual ssize_t Send(int fd, const std::string& data);
         virtual bool Send(int fd, const std::string& data);
 
+        // CM: Add function to send data over tcp socket managing TCP packet fragmentation
         /**
-         *
-		 * \brief Send data in json format.
-		 * \param ms timeout to wait write operation on socket available
-		 * \param jsonMsg data to send
-		 * \return True if data is correctly sent over TCP socket, False otherwise.
-		 */
-        //virtual bool SendMessage(uint32_t ms, const Json::Value& jsonMsg);
+         * \brief Send data in json format.
+         * \param ms timeout to wait write operation on socket available
+         * \param jsonMsg data to send
+         * \return True if data is correctly sent over TCP socket, False otherwise.
+         */
         virtual bool SendMessage(int fd, const Json::Value& jsonMsg);
-
+#endif
         /**
          * \brief Wait message.
          *
