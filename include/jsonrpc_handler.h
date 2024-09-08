@@ -30,7 +30,7 @@
 #include <string>
 #include <list>
 
-#include <common/json/json.h>
+#include <json/json.h>
 
 #include "jsonrpc_common.h"
 

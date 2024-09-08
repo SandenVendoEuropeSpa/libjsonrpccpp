@@ -196,9 +196,6 @@ bool TcpServer::SendMessage(int fd, const Json::Value& jsonMsg)
 	bool jsonMsgTx = false;
 	if(jsonMsg != Json::Value::null)
 	{
-	  fd_set fdsr;
-	  int max_sock = m_sock;
-
 	  std::string msg = m_jsonHandler.GetString(jsonMsg);
 
 	  /* encoding */
@@ -282,8 +279,6 @@ int TcpServer::GetReceivingSocket(void)
         		curlyBracketIdx++;
         	else if(*begin=='}')
         		curlyBracketIdx--;
-        	else
-        		;
         	queuedMsg = queuedMsg + *begin;
         	//queued message found
         	if(curlyBracketIdx==0 && *begin=='}')
@@ -706,8 +701,6 @@ int TcpServer::GetReceivingSocket(void)
           std::cerr << "error on F_SETFL" << std::endl;
         }
         //O_NONBLOCK set without errors. continue from here
-        else
-          ;
       }
 #endif  // _WIN32
       return total_size;
