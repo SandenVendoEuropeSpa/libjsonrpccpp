@@ -32,7 +32,7 @@ AC_ARG_ENABLE(	[doc],
 # Configure options: --with-json-cpp-inc-dir
 AC_ARG_WITH(	[jsoncpp-inc-dir],
 		[AS_HELP_STRING([--with-jsoncpp-inc-dir], [set jsoncpp include dir (default is /usr/include/jsoncpp)])],
-		[JSONCPP_INC_DIR="$withval"], 
+		[JSONCPP_INC_DIR="$withval"],
 		[JSONCPP_INC_DIR='/usr/include/jsoncpp'])
 
 AC_CHECK_LIB([curl], [curl_easy_init])
@@ -40,6 +40,10 @@ AC_CHECK_LIB([curl], [curl_easy_init])
 # Allow the user to specify the pkgconfig directory.
 #
 #PKGCONFIG
+# enable pkg-config
+
+PKG_PROG_PKG_CONFIG
+PKG_CHECK_MODULES(JSONCPP, jsoncpp >= 0.6.0)
 
 # Check for doxygen program.
 AM_CONDITIONAL([HAVE_DOXYGEN],[test "${DOXYGEN}" != ':'])
@@ -50,7 +54,7 @@ AM_CONDITIONAL([INSTALL_EXAMPLES],[test "${examples}" == 'yes'])
 
 # Output.
 #
-AC_SUBST([JSONCPP_INC_DIR]) 
+AC_SUBST([JSONCPP_INC_DIR])
 
 AC_CONFIG_FILES(Makefile src/Makefile test/Makefile examples/Makefile doc/Makefile)
 AC_OUTPUT
