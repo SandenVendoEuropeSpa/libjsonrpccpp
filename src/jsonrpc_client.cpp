@@ -26,10 +26,6 @@
 
 #include "jsonrpc_client.h"
 
-#ifdef _WIN32
-#define close closesocket
-#endif
-
 namespace Json
 {
   namespace Rpc

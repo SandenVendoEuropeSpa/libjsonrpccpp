@@ -25,12 +25,6 @@
 #ifndef JSONRPC_CLIENT_H
 #define JSONRPC_CLIENT_H
 
-#if defined(_MSC_VER)
-#include <BaseTsd.h>
-typedef SSIZE_T ssize_t;
-#endif
-
-
 #include "jsonrpc_common.h"
 #include "jsonrpc_handler.h"
 

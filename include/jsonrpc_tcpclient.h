@@ -40,7 +40,7 @@ namespace Json
   namespace Rpc
   {
     /**
-     * \class TcpClient
+     * \class TcpClient
      * \brief JSON-RPC TCP client.
      */
     class TcpClient : public Client

@@ -25,9 +25,6 @@
 #include <iostream>
 #include <stdexcept>
 
-//#include "system.h"
-//using namespace system_util;
-
 #include "jsonrpc_tcpserver.h"
 
 #include "netstring.h"

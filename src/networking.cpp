@@ -27,10 +27,6 @@
 
 #include "networking.h"
 
-#ifdef _WIN32
-#define close closesocket
-#endif
-
 namespace networking
 {
 #ifdef _WIN32
