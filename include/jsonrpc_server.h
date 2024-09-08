@@ -56,7 +56,7 @@ namespace Json
         /**
          * \brief Wait message.
          *
-         * This function do a select() on the socket and Process() immediately 
+         * This function do a select() on the socket and Process() immediately
          * the JSON-RPC message.
          * \param ms millisecond to wait (0 means infinite)
          */
@@ -105,14 +105,11 @@ namespace Json
          * response sent, false otherwise (mainly send/receive error)
          * \note This method will blocked until data comes.
          */
-        
-#ifndef MULTITREAD
         virtual bool Recv(int fd) = 0;
-#endif
-        
+
         /**
          * \brief Close socket.
-         * \note It should be overriden for connection-oriented protocol 
+         * \note It should be overriden for connection-oriented protocol
          * like TCP to properly close all client sockets.
          */
         virtual void Close();

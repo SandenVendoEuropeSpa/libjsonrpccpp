@@ -33,10 +33,6 @@
 #define RECV_QUEUED
 //#undef  RECV_QUEUED
 
-//Coban modification: experimental
-#define MULTITREAD
-#undef MULTITREAD
-
 #include <list>
 
 #include "jsonrpc_common.h"
@@ -72,13 +68,7 @@ namespace Json
          * response sent, false otherwise (mainly send/recv error)
          * \note This method will blocked until data comes.
          */
-
-#ifndef MULTITREAD
         virtual bool Recv(int fd);
-#else
-        void RecvRun(int fd);
-        void *Recv(void *arg);
-#endif
 
         virtual int GetReceivingSocket(void);
 
@@ -106,7 +96,7 @@ namespace Json
         /**
          * \brief Wait message.
          *
-         * This function do a select() on the socket and Process() immediately 
+         * This function do a select() on the socket and Process() immediately
          * the JSON-RPC message.
          * \param ms millisecond to wait (0 means infinite)
          */
@@ -122,7 +112,7 @@ namespace Json
          * \return -1 if error, 0 otherwise
          */
         bool Accept();
-        
+
         /**
          * \brief Close listen socket and all client sockets.
          */

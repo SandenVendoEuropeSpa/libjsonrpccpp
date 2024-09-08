@@ -214,9 +214,6 @@ int TcpServer::GetReceivingSocket(void)
 	return m_currentReceivingSocket;
 }
 
-
-#ifndef MULTITREAD
-
     bool TcpServer::Recv(int fd)
     {
       Json::Value response;
@@ -373,103 +370,6 @@ int TcpServer::GetReceivingSocket(void)
       }
     }
 
-#else  //MULTITREAD
-
-    void TcpServer::RecvRun(int fd)
-    {
-    	void* ret = NULL;
-    	ThreadArg* arg = new ThreadArgImpl<TcpServer>(*this,
-    	    &TcpServer::Recv, (void*)(&fd));
-    	Thread th(arg);
-
-    	th.Start(false);
-    	//th.Join(&ret);
-    	std::cout << ret << std::endl;
-    }
-
-
-    void *TcpServer::Recv(void *arg)
-    {
-      Json::Value response;
-      ssize_t nb = -1;
-      char buf[1500];
-      bool retvalue;
-
-      int fd;
-      memcpy((void*)&fd, arg, sizeof(int));
-
-      nb = recv(fd, buf, sizeof(buf), 0);
-
-      /* give the message to JsonHandler */
-      if(nb > 0)
-      {
-        std::string msg = std::string(buf, nb);
-
-        if(GetEncapsulatedFormat() == Json::Rpc::NETSTRING)
-        {
-          try
-          {
-            msg = netstring::decode(msg);
-          }
-          catch(const netstring::NetstringException& e)
-          {
-            /* error parsing Netstring */
-            std::cerr << e.what() << std::endl;
-            //return false;
-            retvalue = false;
-            return (void*)(&retvalue);
-          }
-        }
-
-        m_jsonHandler.Process(msg, response);
-
-        /* in case of notification message received, the response could be Json::Value::null */
-        if(response != Json::Value::null)
-        {
-          std::string rep = m_jsonHandler.GetString(response);
-
-          /* encoding */
-          if(GetEncapsulatedFormat() == Json::Rpc::NETSTRING)
-          {
-            rep = netstring::encode(rep);
-          }
-
-          int bytesToSend = rep.length();
-          const char* ptrBuffer = rep.c_str();
-          do
-          {
-            int retVal = send(fd, ptrBuffer, bytesToSend, 0);
-            if(retVal == -1)
-            {
-              /* error */
-              std::cerr << "Error while sending data: "
-                        << strerror(errno) << std::endl;
-              //return false;
-              retvalue = false;
-              return (void*)(&retvalue);
-            }
-            bytesToSend -= retVal;
-            ptrBuffer += retVal;
-          }while(bytesToSend > 0);
-        }
-
-       //return true;
-        retvalue = true;
-        return (void*)(&retvalue);
-
-      }
-      else
-      {
-        m_purge.push_back(fd);
-        //return false;
-        retvalue = false;
-        return (void*)(&retvalue);
-
-      }
-    }
-
-#endif //MULTITREAD
-
     void TcpServer::WaitMessage(uint32_t ms)
     {
       fd_set fdsr;
@@ -518,13 +418,7 @@ int TcpServer::GetReceivingSocket(void)
         {
           if(FD_ISSET((*it), &fdsr))
           {
-
-#ifndef MULTITREAD
             Recv((*it));
-#else
-
-            RecvRun((*it));
-#endif
           }
         }
 
