@@ -31,7 +31,7 @@
 //Coban modification to allow the execution of queued message in the receiving tcp buffer
 #define RECV_QUEUED
 
-//CM 
+//CM modification for manage TCP packet fragmentation
 #define ALLOW_TCP_FRAGMENTATION
 
 #include <list>
@@ -168,8 +168,8 @@ namespace Json
         std::list<int> m_purge;
 
         /**
-		 * \brief Socket that is receiving data from a connected client (last receiving socket).
-		 */
+         * \brief Socket that is receiving data from a connected client (last receiving socket).
+         */
         int m_currentReceivingSocket;
     };
   } /* namespace Rpc */

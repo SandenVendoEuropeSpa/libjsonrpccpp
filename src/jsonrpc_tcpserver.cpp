@@ -276,49 +276,30 @@ int TcpServer::GetReceivingSocket(void)
         		std::cout << "queuedRxMessage=" << queuedMsg << std::endl;
 #endif
         		m_currentReceivingSocket = fd;
-                m_jsonHandler.Process(queuedMsg, response);
+            m_jsonHandler.Process(queuedMsg, response);
 
+            /* in case of notification message received, the response could be Json::Value::null */
+            if(response != Json::Value::null)
+            {
+              std::string rep = m_jsonHandler.GetString(response);
 
-                /* in case of notification message received, the response could be Json::Value::null */
-                if(response != Json::Value::null)
-                {
-                  std::string rep = m_jsonHandler.GetString(response);
+              /* encoding */
+              if(GetEncapsulatedFormat() == Json::Rpc::NETSTRING)
+              {
+                rep = netstring::encode(rep);
+              }
 
-                  /* encoding */
-                  if(GetEncapsulatedFormat() == Json::Rpc::NETSTRING)
-                  {
-                    rep = netstring::encode(rep);
-                  }
-
-#if 0 // CM_071219: Use new JsonSend function to send fragmented TCP packet
-                  int bytesToSend = rep.length();
-                  const char* ptrBuffer = rep.c_str();
-                  do
-                  {
-                    int retVal = send(fd, ptrBuffer, bytesToSend, 0);
-                    if(retVal == -1)
-                    {
-                      /* error */
-                      std::cerr << "Error while sending data: "
-                                << strerror(errno) << std::endl;
-                      return false;
-                    }
-                    bytesToSend -= retVal;
-                    ptrBuffer += retVal;
-                  }while(bytesToSend > 0);
-#else
-					if (Send(fd, rep) == false)
-					{
-					    std::cerr << "SEND Error!" << std::endl;
-						return false;
-					}
+              if (Send(fd, rep) == false)
+              {
+                  std::cerr << "SEND Error!" << std::endl;
+                return false;
+              }
 #ifdef DEBUG
 					//std::cout << "SEND = " << fd << std::endl;
 #endif
-                }
-#endif
-                //clean the buffer for new message
-                queuedMsg.clear();
+            }
+            //clean the buffer for new message
+            queuedMsg.clear();
         	}
         	begin++;
         }
@@ -356,7 +337,7 @@ int TcpServer::GetReceivingSocket(void)
         }
 
         return true;
-#endif
+#endif //RECV_QUEUED
       }
       else
       {
