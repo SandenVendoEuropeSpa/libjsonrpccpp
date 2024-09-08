@@ -25,12 +25,6 @@
 #ifndef JSONRPC_TCPCLIENT_H 
 #define JSONRPC_TCPCLIENT_H 
 
-//Coban modification to allow large buffer receiving
-#define RECV_NOBLOCKING
-// CM
-#undef  RECV_NOBLOCKING
-#define NOBLOCK_TIMEOUT 2
-
 #include <iostream>
 
 #include "jsonrpc_client.h"
@@ -87,18 +81,6 @@ namespace Json
          * \return copied object reference
          */
         TcpClient& operator=(const TcpClient& obj);
-
-#ifdef RECV_NOBLOCKING
-        /**
-         * \brief Receive data in multiple chunks by checking a non-blocking socket
-         * \brief int s, socket descriptor
-         * \brief int timeout, Timeout in seconds
-         */
-        int recv_timeout(int s , int timeout, std::string& data);
-  #ifdef _WIN32
-        int  gettimeofday(struct timeval * tp, struct timezone * tzp);
-  #endif
-#endif
 
     };
   } /* namespace Rpc */
