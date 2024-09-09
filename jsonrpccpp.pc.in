@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: JsonRpcCpp
+Description: C++ implementation of JSON-RPC 2.0 protocol
+URL: https://github.com/s-vincent/jsonrpc-cpp
+Version: 0.5.0
+Requires:
+Libs: -L${libdir} -ljsonrpccpp
+Libs.private:
+Cflags: -I${includedir}

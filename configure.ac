@@ -5,6 +5,7 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign nostdinc subdir-objects dist-bzip2 dist-
 
 AM_PROG_AR
 LT_INIT
+AC_PROG_LIBTOOL
 #LT_OUTPUT
 
 # Check for C++ compiler and use it to compile the tests.
@@ -56,7 +57,7 @@ AM_CONDITIONAL([INSTALL_EXAMPLES],[test "${examples}" == 'yes'])
 #
 AC_SUBST([JSONCPP_INC_DIR])
 
-AC_CONFIG_FILES(Makefile src/Makefile test/Makefile examples/Makefile doc/Makefile)
+AC_CONFIG_FILES(Makefile src/Makefile test/Makefile examples/Makefile doc/Makefile jsonrpccpp.pc)
 AC_OUTPUT
 
 
