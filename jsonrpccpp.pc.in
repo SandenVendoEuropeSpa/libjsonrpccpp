@@ -8,6 +8,6 @@ Description: C++ implementation of JSON-RPC 2.0 protocol
 URL: https://github.com/s-vincent/jsonrpc-cpp
 Version: 0.5.0
 Requires:
-Libs: -L${libdir} -ljsonrpccpp
+Libs: -L${libdir} -ljsonrpc-cpp
 Libs.private:
 Cflags: -I${includedir}/jsonrpc-cpp
