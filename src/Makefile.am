@@ -31,7 +31,7 @@ include_jsonrpc_cpp_HEADERS=$(libjsonrpc_cpp_la_INCLUDES)
 
 libjsonrpc_cpp_la_LDFLAGS = -release @PACKAGE_VERSION@ -lpthread $(JSONCPP_LIBS) -version-info 0:0:0
 
-AM_CXXFLAGS=-std=c++98 -Wall -Wextra -pedantic -Wredundant-decls -Wshadow -O2 -Wno-long-long -Werror -I$(top_srcdir)/include
+AM_CXXFLAGS=-std=c++98 -Wall -Wextra -pedantic -Wredundant-decls -Wshadow -O2 -Wno-long-long -Werror -I$(top_srcdir)/include $(JSONCPP_CFLAGS)
 
 AM_CPPFLAGS=$(JSONCPP_CFLAGS)
 if ENABLE_DEBUG

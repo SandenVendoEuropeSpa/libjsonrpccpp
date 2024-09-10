@@ -10,4 +10,4 @@ Version: 0.5.0
 Requires:
 Libs: -L${libdir} -ljsonrpccpp
 Libs.private:
-Cflags: -I${includedir}
+Cflags: -I${includedir}/jsonrpc-cpp

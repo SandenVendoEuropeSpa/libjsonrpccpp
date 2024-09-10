@@ -19,16 +19,16 @@ system_SOURCES=system.cpp
 
 
 
-tcp_client_LDADD=$(top_builddir)/src/libjsonrpc-cpp.la -ljsoncpp 
-tcp_server_LDADD=$(top_builddir)/src/libjsonrpc-cpp.la -ljsoncpp 
-udp_client_LDADD=$(top_builddir)/src/libjsonrpc-cpp.la -ljsoncpp 
+tcp_client_LDADD=$(top_builddir)/src/libjsonrpc-cpp.la -ljsoncpp
+tcp_server_LDADD=$(top_builddir)/src/libjsonrpc-cpp.la -ljsoncpp
+udp_client_LDADD=$(top_builddir)/src/libjsonrpc-cpp.la -ljsoncpp
 udp_server_LDADD=$(top_builddir)/src/libjsonrpc-cpp.la -ljsoncpp
-system_LDADD=$(top_builddir)/src/libjsonrpc-cpp.la -ljsoncpp 
+system_LDADD=$(top_builddir)/src/libjsonrpc-cpp.la -ljsoncpp
 
-AM_CXXFLAGS=-std=c++98 -Wall -Wextra -pedantic -Wredundant-decls -Wshadow -O2 -Wno-long-long -Werror -I$(top_srcdir)/include
+AM_CXXFLAGS=-std=c++98 -Wall -Wextra -pedantic -Wredundant-decls -Wshadow -O2 -Wno-long-long -Werror -I$(top_srcdir)/include $(JSONCPP_CFLAGS)
 
 AM_CPPFLAGS=-I"@JSONCPP_INC_DIR@" -I"$(top_srcdir)/src"
-if ENABLE_DEBUG 
+if ENABLE_DEBUG
    AM_CPPFLAGS+='-DDEBUG'
 	 CXXFLAGS+=-g
 endif
